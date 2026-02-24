@@ -13,8 +13,8 @@ class App: AppCenterApplication {
     static let name = Bundle.main.object(forInfoDictionaryKey: "CFBundleName") as! String
     static let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as! String
     static let licence = Bundle.main.object(forInfoDictionaryKey: "NSHumanReadableCopyright") as! String
-    static let repository = "https://github.com/lwouis/alt-tab-macos"
-    static let website = "https://alt-tab-macos.netlify.app"
+    static let repository = "https://github.com/spqw/alt-tab-macos"
+    static let website = "https://github.com/spqw/alt-tab-macos"
     static let appIcon = CGImage.named("app.icns")
     static var app: App!
     var isTerminating = false

@@ -248,6 +248,7 @@ enum WindowOrderPreference: CaseIterable, MacroPreference {
     case recentlyCreated
     case alphabetical
     case space
+    case leastRecentlyFocused
 
     var localizedString: LocalizedString {
         switch self {
@@ -255,6 +256,7 @@ enum WindowOrderPreference: CaseIterable, MacroPreference {
             case .recentlyCreated: return NSLocalizedString("Recently Created First", comment: "")
             case .alphabetical: return NSLocalizedString("Alphabetical Order", comment: "")
             case .space: return NSLocalizedString("Space Order", comment: "")
+            case .leastRecentlyFocused: return NSLocalizedString("Least Recently Focused First", comment: "")
         }
     }
 }

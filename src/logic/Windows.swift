@@ -193,7 +193,7 @@ class Windows {
         }
         if let frontmostPid = NSWorkspace.shared.frontmostApplication?.processIdentifier,
            let frontmostApp = Applications.findOrCreate(frontmostPid),
-           (frontmostApp.focusedWindow == nil || Preferences.windowOrder[App.app.shortcutIndex] != .recentlyFocused),
+           (frontmostApp.focusedWindow == nil || (Preferences.windowOrder[App.app.shortcutIndex] != .recentlyFocused && Preferences.windowOrder[App.app.shortcutIndex] != .leastRecentlyFocused)),
            let lastFocusedOrderWindowIndex = getLastFocusedOrderWindowIndex() {
             updateSelectedAndHoveredWindowIndex(lastFocusedOrderWindowIndex)
         } else {
@@ -310,6 +310,9 @@ class Windows {
             let sortType = Preferences.windowOrder[App.app.shortcutIndex]
             if sortType == .recentlyFocused {
                 return $0.lastFocusOrder < $1.lastFocusOrder
+            }
+            if sortType == .leastRecentlyFocused {
+                return $0.lastFocusOrder > $1.lastFocusOrder
             }
             if sortType == .recentlyCreated {
                 return $1.creationOrder < $0.creationOrder

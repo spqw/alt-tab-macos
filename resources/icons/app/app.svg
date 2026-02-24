@@ -229,4 +229,9 @@
 <stop offset="1" stop-color="#EAFEFE"/>
 </linearGradient>
 </defs>
+<!-- Alpha badge -->
+<g transform="translate(740, 700)">
+<circle cx="120" cy="120" r="130" fill="#FF6B00" stroke="#FFFFFF" stroke-width="12"/>
+<text x="120" y="155" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="180" font-weight="bold" fill="white">α</text>
+</g>
 </svg>
