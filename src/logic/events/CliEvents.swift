@@ -88,6 +88,48 @@ class CliServer {
             App.showUi(shortcutIndex)
             return noOutput
         }
+        if rawValue.hasPrefix("--show-space="),
+           let spaceIndex = Int(rawValue.dropFirst("--show-space=".count)), spaceIndex >= 1 {
+            Windows.cliSpaceFilter = spaceIndex
+            App.showUi(0)
+            return noOutput
+        }
+        if rawValue.hasPrefix("--cycle-space="),
+           let spaceIndex = Int(rawValue.dropFirst("--cycle-space=".count)), spaceIndex >= 1 {
+            if App.appIsBeingUsed && Windows.cliSpaceFilter == spaceIndex {
+                // already showing for this space — cycle to next window
+                App.cycleSelection(.leading)
+            } else {
+                // not showing or showing a different space — open filtered to this space
+                Windows.cliSpaceFilter = spaceIndex
+                App.showUi(0)
+            }
+            return noOutput
+        }
+        if rawValue.hasPrefix("--list-space="),
+           let spaceIndex = Int(rawValue.dropFirst("--list-space=".count)), spaceIndex >= 1 {
+            return JsonWindowFullList(windows: Windows.list
+                .filter { !$0.isWindowlessApp && ($0.isOnAllSpaces || $0.spaceIndexes.contains(spaceIndex)) }
+                .map {
+                    JsonWindowFull(
+                        id: $0.cgWindowId,
+                        title: $0.title,
+                        appName: $0.application.localizedName,
+                        appBundleId: $0.application.bundleIdentifier,
+                        spaceIndexes: $0.spaceIndexes,
+                        lastFocusOrder: $0.lastFocusOrder,
+                        creationOrder: $0.creationOrder,
+                        isTabbed: $0.isTabbed,
+                        isHidden: $0.isHidden,
+                        isFullscreen: $0.isFullscreen,
+                        isMinimized: $0.isMinimized,
+                        isOnAllSpaces: $0.isOnAllSpaces,
+                        position: $0.position,
+                        size: $0.size
+                    )
+                }
+            )
+        }
         return error
     }
 
@@ -127,7 +169,7 @@ class CliClient {
     static func detectCommand() -> String? {
         let args = CommandLine.arguments
         if args.count == 2 && !args[1].starts(with: "--logs=") {
-            if args[1] == "--list" || args[1] == "--detailed-list" || args[1].hasPrefix("--focus=") || args[1].hasPrefix("--focusUsingLastFocusOrder=") || args[1].hasPrefix("--show=") {
+            if args[1] == "--list" || args[1] == "--detailed-list" || args[1].hasPrefix("--focus=") || args[1].hasPrefix("--focusUsingLastFocusOrder=") || args[1].hasPrefix("--show=") || args[1].hasPrefix("--show-space=") || args[1].hasPrefix("--cycle-space=") || args[1].hasPrefix("--list-space=") {
                 return args[1]
             }
         }

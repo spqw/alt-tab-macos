@@ -9,6 +9,9 @@ class Windows {
     private static var lastFocusedWindowTarget: String?
     private static var lastWindowActivityType = WindowActivityType.none
     static var searchQuery = ""
+    /// When set via CLI (--show-space, --cycle-space), only windows on this space index are shown.
+    /// Reset to nil in App.hideUi().
+    static var cliSpaceFilter: SpaceIndex?
     private static var shouldSelectBestMatchOnSearchChange = false
     private static var shouldRestoreDefaultSelectionOnSearchClear = false
 
@@ -195,6 +198,7 @@ class Windows {
                 !(!(Preferences.showMinimizedWindows[App.shortcutIndex] != .hide) && window.isMinimized) &&
                 !(Preferences.spacesToShow[App.shortcutIndex] == .visible && !Spaces.visibleSpaces.contains { visibleSpace in window.spaceIds.contains { $0 == visibleSpace } }) &&
                 !(Preferences.spacesToShow[App.shortcutIndex] == .nonVisible && Spaces.visibleSpaces.contains { visibleSpace in window.spaceIds.contains { $0 == visibleSpace } }) &&
+                !(cliSpaceFilter != nil && !window.isOnAllSpaces && !window.spaceIndexes.contains(cliSpaceFilter!)) &&
                 !(Preferences.screensToShow[App.shortcutIndex] == .showingAltTab && !window.isOnScreen(NSScreen.preferred)) &&
                 (Preferences.showTabsAsWindows || !window.isTabbed))
     }

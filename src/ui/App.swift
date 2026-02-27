@@ -59,6 +59,7 @@ class App: AppCenterApplication {
         appIsBeingUsed = false
         isFirstSummon = true
         forceDoNothingOnRelease = false
+        Windows.cliSpaceFilter = nil
         TilesView.endSearchSession()
         CursorEvents.toggle(false)
         TrackpadEvents.reset()
